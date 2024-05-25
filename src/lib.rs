@@ -1,11 +1,14 @@
 //! This function is the bare minimum to do literally nothing
 
+mod http;
+
 use udf::prelude::*;
-use reqwest::blocking::*;
-struct EmptyCall;
+use crate::http::http;
+
+struct HttpCall;
 
 #[register]
-impl BasicUdf for EmptyCall {
+impl BasicUdf for HttpCall {
     type Returns<'a> = Option<String>;
 
     fn init(_cfg: &UdfCfg<Init>, _args: &ArgList<Init>) -> Result<Self, String> {
@@ -21,8 +24,10 @@ impl BasicUdf for EmptyCall {
         let arg0 = args.get(0).unwrap().value();
 
         let s = arg0.as_string().unwrap().to_string();
-        let result = get(s).unwrap().text().unwrap();
+        let result = http(&s);
         Ok(Some(result))
     }
 }
+
+
 
