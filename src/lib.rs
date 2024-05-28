@@ -104,7 +104,7 @@ impl BasicUdf for HttpCall {
             request_proxy,
         );
         let r = match result {
-            Ok(data) => Some(data),
+            Ok(data) => data,
             Err(err) => {
                 dbg!(err);
                 None
