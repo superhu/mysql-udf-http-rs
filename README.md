@@ -23,3 +23,5 @@ SET @tt_re = (SELECT empty_call(NEW.url));
 insert into result_t(url,result)values(NEW.url,@tt_re);
 END |
 DELIMITER ;
+遇到openssl的问题：
+yum -y install openssl openssl-devel
