@@ -2,7 +2,6 @@
 
 mod http;
 
-use std::result;
 
 use crate::http::http;
 use udf::prelude::*;
