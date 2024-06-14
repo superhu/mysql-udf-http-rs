@@ -5,10 +5,15 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.86"
-reqwest = { version = "0.12.4", features = ["blocking","gzip","charset"] ,default-features = true}
+reqwest = { version = "0.12.4", features = ["blocking","gzip","charset","multipart"] ,default-features = true}
 # reqwest = { version = "0.12.4", features = ["blocking","rustls-tls","gzip","charset"] ,default-features = false}
 serde_json = "1.0.117"
 udf = "0.5.5"
-
+reqwest-websocket = "*"
+tokio = { version = "1.37.0", features = ["rt", "rt-multi-thread", "macros"] }
+futures-util = "0.3.30"
+libc="*"
+serde = { version = "1.0.202", features = ["derive"] }
+base64 = "0.22.1"
 [lib]
 crate-type = ["cdylib"]

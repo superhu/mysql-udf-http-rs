@@ -1,10 +1,11 @@
-//! This function is the bare minimum to do literally nothing
 
-mod http;
-
+use udf::prelude::*;
 
 use crate::http::http;
-use udf::prelude::*;
+
+mod http;
+mod websocket;
+
 
 struct HttpCall;
 
