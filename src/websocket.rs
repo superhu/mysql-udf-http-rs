@@ -1,5 +1,6 @@
 use std::num::NonZeroU8;
 use std::io::{self, Error, ErrorKind, Read, Write};
+use std::mem;
 use std::os::unix::io::{AsRawFd, RawFd};
 use std::time::Duration;
 use udf::{ArgList, BasicUdf, Init, Process, ProcessError, register, UdfCfg};
@@ -23,13 +24,17 @@ impl BasicUdf for Websocket {
         let ip = Self::get_ip(args);
         let max_fd = unsafe { libc::socket(1, 1, 0) };
         unsafe { libc::close(max_fd as i32) };
-        let socket_addr: *mut libc::sockaddr = std::ptr::null_mut() as *mut libc::sockaddr;
+        // https://users.rust-lang.org/t/help-understanding-libc-call/17308
+        let mut storage: libc::sockaddr_storage = unsafe { mem::zeroed() };
+        let socket_addr: *mut libc::sockaddr = &mut storage as *mut _ as *mut _;
+        // let socket_addr: *mut libc::sockaddr = std::ptr::null_mut() as *mut libc::sockaddr;
         let addr_size0 = std::mem::size_of::<libc::sockaddr>();
         let addr_size: *mut libc::c_uint = addr_size0 as *mut libc::c_uint;
 
         dbg!(&max_fd);
         for fd in 3..max_fd {
             dbg!(&fd);
+            // On success, zero is returned.  On error, -1 is returned
             let ret = unsafe { libc::getpeername(fd, socket_addr, addr_size) };
             dbg!(ret);
             if ret == 0 { // let client_addr: libc::sockaddr = unsafe { std::mem::transmute(socket_addr) };
